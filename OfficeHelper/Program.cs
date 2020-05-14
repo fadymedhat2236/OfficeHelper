@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Word= Microsoft.Office.Interop.Word;
+using Visio= Microsoft.Office.Interop.Visio;
 namespace OfficeHelper
 {
     class Program
@@ -13,6 +14,7 @@ namespace OfficeHelper
             Word.Application wordApp= new Word.Application();
             try {
                 WordHandler wordHandler = new WordHandler();
+                VisioHandler visioHandler = new VisioHandler();
                 //for thr SCI
                 Word.Document doc = wordHandler.generateSCI(wordApp);
                 doc.Save();
@@ -30,9 +32,11 @@ namespace OfficeHelper
                 //for the DTD
                 doc = wordHandler.generateDTD(wordApp);
                 doc.Save();
+                visioHandler.addRequestFlowDiagram(ref doc);
                 //copy small chunk to avoid large clipboard objects warning message on close
                 doc.Sections[1].Range.Copy();
                 doc.Close();
+
             }
             catch (Exception ex)
             {
