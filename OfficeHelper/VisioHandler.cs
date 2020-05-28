@@ -53,6 +53,7 @@ namespace OfficeHelper
                 Word.Bookmark sequenceDiagBM = doc.Bookmarks["SequenceDiagram"];
                 Word.Range sequenceDiagRng = sequenceDiagBM.Range;
                 sequenceDiagRng.PasteAndFormat(Word.WdRecoveryType.wdFormatOriginalFormatting);
+                Console.WriteLine("Sequance Diagram Added");
             }
             catch(Exception ex)
             {
@@ -93,6 +94,7 @@ namespace OfficeHelper
                 Word.Bookmark requestDiagBM = doc.Bookmarks["RequestFlow"];
                 Word.Range requestDiagRng = requestDiagBM.Range;
                 requestDiagRng.PasteAndFormat(Word.WdRecoveryType.wdFormatOriginalFormatting);
+                Console.WriteLine("Request flow Added");
             }
             catch (Exception ex)
             {
@@ -133,6 +135,7 @@ namespace OfficeHelper
                 Word.Bookmark ResponseDiagBM = doc.Bookmarks["ResponseFlow"];
                 Word.Range ResponseDiagRng = ResponseDiagBM.Range;
                 ResponseDiagRng.PasteAndFormat(Word.WdRecoveryType.wdFormatOriginalFormatting);
+                Console.WriteLine("Response flow Added");
             }
             catch (Exception ex)
             {
