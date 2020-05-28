@@ -86,6 +86,31 @@ namespace OfficeHelper
                 throw ex;
             }
         }
+        public void copyTableData(int oldTableNumber,int newTableNumber,ref Dictionary<string,string> dict, ref Word.Document newDoc)
+        {
+            string oldFilePath = Constants.OldDTDFilesPath + "INT-002-002-" + dict["OldServiceID"] + "-DTD " + dict["OldServiceSubject"] + ".docx";
+            Console.WriteLine(oldFilePath);
+            Word.Document oldDoc = wordApp.Documents.Open(oldFilePath);
+            Word.Table oldRequestTable = oldDoc.Tables[oldTableNumber];
+            Word.Rows oldRequestRows = oldRequestTable.Rows;
+
+            Word.Table newRequestTable = newDoc.Tables[newTableNumber];
+            Word.Rows newRequestRows = newRequestTable.Rows;
+
+            int index = 2;
+            for (int i = 3; i <= oldRequestRows.Count - 1; i++)
+            {
+                newRequestTable.Rows.Add(newRequestTable.Rows[index]);
+                for (int j = 1; j <= 3; j++)
+                {
+                    Word.Cell cell1 = newRequestTable.Cell(index, j);
+                    Console.WriteLine(oldRequestTable.Cell(i, j).Range.Text);
+                    cell1.Range.Text = oldRequestTable.Cell(i, j).Range.Text;
+                }
+                index++;
+            }
+            newRequestTable.Rows[index].Delete();
+        }
         ~WordHandler()
         {
             wordApp.DisplayAlerts = Word.WdAlertLevel.wdAlertsNone;

@@ -35,15 +35,15 @@ namespace OfficeHelper
         {
             Excel.Range xlRange = ws.UsedRange;
             Dictionary<string, string> dict = new Dictionary<string, string>();
-            for (int i = 1; i <= 11; i++)
+            for (int i = 1; i <= 13; i++)
             {
                 string key = (string)(xlRange.Cells[1, i] as Excel.Range).Value2.ToString();
                 string value = (string)(xlRange.Cells[rowNumber, i] as Excel.Range).Value2.ToString();
                 dict.Add(key,value);
             }
-            makeSCI = (string)(xlRange.Cells[rowNumber, 12] as Excel.Range).Value2.ToString();
-            makeSPI = (string)(xlRange.Cells[rowNumber, 13] as Excel.Range).Value2.ToString();
-            makeDTD = (string)(xlRange.Cells[rowNumber, 14] as Excel.Range).Value2.ToString();
+            makeSCI = (string)(xlRange.Cells[rowNumber, 14] as Excel.Range).Value2.ToString();
+            makeSPI = (string)(xlRange.Cells[rowNumber, 15] as Excel.Range).Value2.ToString();
+            makeDTD = (string)(xlRange.Cells[rowNumber, 16] as Excel.Range).Value2.ToString();
             return dict;
         }
         public void processExcel()
@@ -74,6 +74,10 @@ namespace OfficeHelper
                     visioHandler.addSequanceDiagram(ref doc);
                     visioHandler.addRequestFlowDiagram(ref doc);
                     visioHandler.addResponseFlowDiagram(ref doc);
+
+                    //copying old table data
+                    wordHandler.copyTableData(9, 10, ref dict, ref doc);
+                    wordHandler.copyTableData(10, 14, ref dict, ref doc);
                     doc.Save();
                     //copy small chunk to avoid large clipboard objects warning message on close
                     doc.Sections[1].Range.Copy();
