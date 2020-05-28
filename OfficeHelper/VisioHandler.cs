@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using Word = Microsoft.Office.Interop.Word;
 using Visio = Microsoft.Office.Interop.Visio;
 
@@ -10,14 +11,17 @@ namespace OfficeHelper
 {
     class VisioHandler
     {
+        Visio.Application visioApp = new Visio.Application();
+        public VisioHandler()
+        { 
+            visioApp.Visible = false;
+        }
         public void addSequanceDiagram(ref Word.Document doc)
         {
             try
             {
-                Visio.Application visioApp = new Visio.Application();
-                visioApp.Visible = false;
                 Visio.Document sequenceVisio;
-                string sequenceDiagramPath = Constants.TemplatesFolderPath + "\\Templates\\" + Constants.ServiceFlow + "\\ServiceSequanceDiagram.vsdx";
+                string sequenceDiagramPath = Directory.GetCurrentDirectory() + "\\Templates\\" + Constants.ServiceFlow + "\\ServiceSequanceDiagram.vsdx";
                 sequenceVisio = visioApp.Documents.Open(sequenceDiagramPath);
                 Visio.Page sequencePage = sequenceVisio.Pages[1];
                 foreach (Visio.Shape shp in sequencePage.Shapes)
@@ -49,27 +53,19 @@ namespace OfficeHelper
                 Word.Bookmark sequenceDiagBM = doc.Bookmarks["SequenceDiagram"];
                 Word.Range sequenceDiagRng = sequenceDiagBM.Range;
                 sequenceDiagRng.PasteAndFormat(Word.WdRecoveryType.wdFormatOriginalFormatting);
-
-                
-
-                visioApp.Quit();
             }
             catch(Exception ex)
             {
                 throw ex;
             }
-
-
         }
 
         public void addRequestFlowDiagram(ref Word.Document doc)
         {
             try
             {
-                Visio.Application visioApp = new Visio.Application();
-                visioApp.Visible = false;
                 Visio.Document requestVisio;
-                string RequestDiagramPath = Constants.TemplatesFolderPath + "\\Templates\\" + Constants.ServiceFlow + "\\NormalServiceRequestFlow.vsdx";
+                string RequestDiagramPath = Directory.GetCurrentDirectory() + "\\Templates\\" + Constants.ServiceFlow + "\\NormalServiceRequestFlow.vsdx";
                 requestVisio = visioApp.Documents.Open(RequestDiagramPath);
                 Visio.Page requestPage = requestVisio.Pages[1];
                 foreach (Visio.Shape shp in requestPage.Shapes)
@@ -97,8 +93,6 @@ namespace OfficeHelper
                 Word.Bookmark requestDiagBM = doc.Bookmarks["RequestFlow"];
                 Word.Range requestDiagRng = requestDiagBM.Range;
                 requestDiagRng.PasteAndFormat(Word.WdRecoveryType.wdFormatOriginalFormatting);
-
-                visioApp.Quit();
             }
             catch (Exception ex)
             {
@@ -110,10 +104,8 @@ namespace OfficeHelper
         {
             try
             {
-                Visio.Application visioApp = new Visio.Application();
-                visioApp.Visible = false;
                 Visio.Document ResponseVisio;
-                string ResponseDiagramPath = Constants.TemplatesFolderPath + "\\Templates\\" + Constants.ServiceFlow + "\\NormalServiceResponseFlow.vsdx";
+                string ResponseDiagramPath = Directory.GetCurrentDirectory() + "\\Templates\\" + Constants.ServiceFlow + "\\NormalServiceResponseFlow.vsdx";
                 ResponseVisio = visioApp.Documents.Open(ResponseDiagramPath);
                 Visio.Page ResponsePage = ResponseVisio.Pages[1];
                 foreach (Visio.Shape shp in ResponsePage.Shapes)
@@ -141,13 +133,15 @@ namespace OfficeHelper
                 Word.Bookmark ResponseDiagBM = doc.Bookmarks["ResponseFlow"];
                 Word.Range ResponseDiagRng = ResponseDiagBM.Range;
                 ResponseDiagRng.PasteAndFormat(Word.WdRecoveryType.wdFormatOriginalFormatting);
-
-                visioApp.Quit();
             }
             catch (Exception ex)
             {
                 throw ex;
             }
+        }
+        ~VisioHandler()
+        {
+            visioApp.Quit();
         }
     }
 }
