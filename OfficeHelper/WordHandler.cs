@@ -45,6 +45,100 @@ namespace OfficeHelper
                 throw ex;
             }
         }
+        public void addSCIErrorMapping(ref List<List<string>> errorMappng, ref Word.Document doc,string serviceFlow)
+        {
+            int tableNumber = 6;
+            Word.Table ErrorTable = doc.Tables[tableNumber];
+            int index=0;
+            if(serviceFlow == "Inbound")
+                index = 24;
+            else if(serviceFlow == "Outbound")
+                index = 25;
+            foreach (List<string> errorRow in errorMappng)
+            {
+                if (serviceFlow == "Inbound")
+                {
+                    ErrorTable.Rows.Add(ErrorTable.Rows[index]);
+                    //Status Code
+                    Word.Cell cell = ErrorTable.Cell(index, 1);
+                    cell.Range.Text = errorRow[1];
+                    //Description
+                    cell = ErrorTable.Cell(index, 2);
+                    cell.Range.Text = errorRow[3];
+                }
+                else if (serviceFlow == "Outbound")
+                {
+                    ErrorTable.Rows.Add(ErrorTable.Rows[1]);
+                    //Return Code
+                    Word.Cell cell = ErrorTable.Cell(index, 1);
+                    cell.Range.Text = errorRow[1];
+                    //Reason Code
+                    cell = ErrorTable.Cell(index, 2);
+                    cell.Range.Text = errorRow[2];
+                    //Description
+                    cell = ErrorTable.Cell(index, 3);
+                    cell.Range.Text = errorRow[3];
+                }
+                index++;
+            }
+            ErrorTable.Rows[index].Delete();
+        }
+        public void addSPIErrorMapping(ref List<List<string>> errorMappng, ref Word.Document doc,string serviceFlow)
+        {
+            int tableNumber = 7;
+            Word.Table ErrorTable = doc.Tables[tableNumber];
+            int index = 2;
+            foreach (List<string> errorRow in errorMappng)
+            {
+                if (serviceFlow == "Inbound")
+                {
+                    ErrorTable.Rows.Add(ErrorTable.Rows[1]);
+                    //Return Code
+                    Word.Cell cell = ErrorTable.Cell(index, 1);
+                    cell.Range.Text = errorRow[1];
+                    //Reason Code
+                    cell = ErrorTable.Cell(index, 2);
+                    cell.Range.Text = errorRow[2];
+                    //Description
+                    cell = ErrorTable.Cell(index, 3);
+                    cell.Range.Text = errorRow[3];
+                }
+                else if (serviceFlow == "Outbound")
+                {
+                    ErrorTable.Rows.Add(ErrorTable.Rows[index]);
+                    //Status Code
+                    Word.Cell cell = ErrorTable.Cell(index, 1);
+                    cell.Range.Text = errorRow[1];
+                    //Description
+                    cell = ErrorTable.Cell(index, 2);
+                    cell.Range.Text = errorRow[3];
+                }
+                index++;
+            }
+            ErrorTable.Rows[index].Delete();
+        }
+        public void addDTDErrorMapping(ref List<List<string>> errorMappng, ref Word.Document doc)
+        {
+            int tableNumber = 16;
+            Word.Table ErrorTable = doc.Tables[tableNumber];
+            int index = 2;
+            foreach (List<string> errorRow in errorMappng)
+            {
+                ErrorTable.Rows.Add(ErrorTable.Rows[index]);
+                
+                Word.Cell cell;
+                cell = ErrorTable.Cell(index, 1);
+                cell.Range.Text = errorRow[0];
+                cell = ErrorTable.Cell(index, 2);
+                cell.Range.Text = errorRow[1];
+                cell = ErrorTable.Cell(index, 3);
+                cell.Range.Text = errorRow[2];
+                cell = ErrorTable.Cell(index, 4);
+                cell.Range.Text = errorRow[3];
+                index++;
+            }
+            ErrorTable.Rows[index].Delete();
+        }
         private void updateDocument(ref Word.Document doc)
         {
             try

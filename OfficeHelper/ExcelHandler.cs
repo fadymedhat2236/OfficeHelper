@@ -15,6 +15,7 @@ namespace OfficeHelper
         WordHandler wordHandler;
         VisioHandler visioHandler;
         Dictionary<string, string> constants;
+        List<List<string>> errorMappng;
         public ExcelHandler()
         {
             excelApp = new Excel.Application();
@@ -22,6 +23,8 @@ namespace OfficeHelper
             visioHandler = new VisioHandler();
             constants = new Dictionary<string, string>();
             getConstants();
+            errorMappng = new List<List<string>>();
+            getErrorMapping();
         }
         private int getRowsCount(Excel.Worksheet ws)
         {
@@ -75,6 +78,22 @@ namespace OfficeHelper
                 constants.Add(key,value);
             }
         }
+        private void getErrorMapping()
+        {
+            Excel.Workbook wb = excelApp.Workbooks.Open(Directory.GetCurrentDirectory() + "\\Constants.xlsx");
+            Excel.Worksheet ws = wb.Worksheets[2];
+            int noRows = getRowsCount(ws);
+            Excel.Range xlRange = ws.UsedRange;
+            for (int i = 2; i <= noRows; i++)
+            {
+                List<string> errorRow = new List<string>();
+                errorRow.Add((string)(xlRange.Cells[i, 1] as Excel.Range).Value2.ToString());
+                errorRow.Add((string)(xlRange.Cells[i, 2] as Excel.Range).Value2.ToString());
+                errorRow.Add((string)(xlRange.Cells[i, 3] as Excel.Range).Value2.ToString());
+                errorRow.Add((string)(xlRange.Cells[i, 4] as Excel.Range).Value2.ToString());
+                errorMappng.Add(errorRow);
+            }
+        }
         public void processExcel()
         {
             Excel.Workbook wb = excelApp.Workbooks.Open(Directory.GetCurrentDirectory() + "\\Constants.xlsx");
@@ -88,12 +107,14 @@ namespace OfficeHelper
                 if (makeSCI=="1")
                 {
                     Word.Document doc= wordHandler.generateDocument(ref dict,ref constants,"SCI");
+                    wordHandler.addSCIErrorMapping(ref errorMappng,ref doc, dict["ServiceFlow"]);
                     doc.Save();
                     doc.Close();
                 }
                 if (makeSPI=="1")
                 {
                     Word.Document doc= wordHandler.generateDocument(ref dict,ref constants,"SPI");
+                    wordHandler.addSPIErrorMapping(ref errorMappng, ref doc, dict["ServiceFlow"]);
                     doc.Save();
                     doc.Close();
                 }
@@ -110,6 +131,7 @@ namespace OfficeHelper
                     List<int> OldResponseTablesNumbers = getTablesNumbers(dict["OldResponseTablesNumbers"]);
                     wordHandler.copyTableData(OldRequestTablesNumbers, 10, ref dict,ref constants,ref doc);
                     wordHandler.copyTableData(OldResponseTablesNumbers, 14, ref dict,ref constants,ref doc);
+                    wordHandler.addDTDErrorMapping(ref errorMappng, ref doc);
                     doc.Save();
                     //copy small chunk to avoid large clipboard objects warning message on close
                     doc.Sections[1].Range.Copy();
