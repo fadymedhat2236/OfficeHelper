@@ -12,12 +12,12 @@ namespace OfficeHelper
     {
         Word.Application wordApp = new Word.Application();
         
-        public Word.Document generateDocument(ref Dictionary<string, string> dict,string documentName)
+        public Word.Document generateDocument(ref Dictionary<string, string> dict,ref Dictionary<string,string> constantsDict,string documentName)
         {
             try
             {
                 // Copy the template
-                string DocFileName = dict["TFSFolderPath"] + "\\"+documentName+"\\" + "INT-002-004-" + dict["ServiceID"] + "-"+documentName+" " + dict["Subject"] + ".docx";
+                string DocFileName = constantsDict["Saving Path"] + "\\"+documentName+"\\" + "INT-002-004-" + dict["ServiceID"] + "-"+documentName+" " + dict["Subject"] + ".docx";
                 File.Copy(Directory.GetCurrentDirectory() + "\\Templates\\" + dict["ServiceFlow"] + "\\Template_"+documentName+".docx", DocFileName, true);
                 Word.Document doc = wordApp.Documents.Open(DocFileName);
 
@@ -86,30 +86,33 @@ namespace OfficeHelper
                 throw ex;
             }
         }
-        public void copyTableData(int oldTableNumber,int newTableNumber,ref Dictionary<string,string> dict, ref Word.Document newDoc)
+        public void copyTableData(List<int> oldTablesNumbers, int newTableNumber,ref Dictionary<string,string> dict, ref Dictionary<string, string> constantsDict, ref Word.Document newDoc)
         {
-            string oldFilePath = Constants.OldDTDFilesPath + "INT-002-002-" + dict["OldServiceID"] + "-DTD " + dict["OldServiceSubject"] + ".docx";
+            string oldFilePath =constantsDict["Reading Old Documents Path"] + "\\INT-002-002-" + dict["OldServiceID"] + "-DTD " + dict["OldServiceSubject"] + ".docx";
             Console.WriteLine(oldFilePath);
             Word.Document oldDoc = wordApp.Documents.Open(oldFilePath);
-            Word.Table oldRequestTable = oldDoc.Tables[oldTableNumber];
-            Word.Rows oldRequestRows = oldRequestTable.Rows;
             Word.Table newRequestTable = newDoc.Tables[newTableNumber];
-
             int index = 2;
-            for (int i = 3; i <= oldRequestRows.Count - 1; i++)
+            foreach (int k in oldTablesNumbers)
             {
-                newRequestTable.Rows.Add(newRequestTable.Rows[index]);
-                Word.Row oldRow = oldRequestRows[i];
-                for (int j = 1; j <=oldRow.Cells.Count; j++)
+                Console.WriteLine("Reading old Table Number "+k);
+                Word.Table oldRequestTable = oldDoc.Tables[k];
+                Word.Rows oldRequestRows = oldRequestTable.Rows;
+                for (int i = 3; i <= oldRequestRows.Count - 1; i++)
                 {
-
-                    Word.Cell cell1 = newRequestTable.Cell(index, j);
-                    Console.WriteLine(i+" "+j+" "+oldRequestTable.Cell(i, j).Range.Text);
-                    cell1.Range.Text = oldRequestTable.Cell(i, j).Range.Text;
+                    newRequestTable.Rows.Add(newRequestTable.Rows[index]);
+                    Word.Row oldRow = oldRequestRows[i];
+                    for (int j = 1; j <= oldRow.Cells.Count; j++)
+                    {
+                        Word.Cell cell1 = newRequestTable.Cell(index, j);
+                        //Console.WriteLine(i + " " + j + " " + oldRequestTable.Cell(i, j).Range.Text);
+                        cell1.Range.Text = oldRequestTable.Cell(i, j).Range.Text;
+                    }
+                    index++;
                 }
-                index++;
             }
             newRequestTable.Rows[index].Delete();
+            oldDoc.Close();
         }
         ~WordHandler()
         {

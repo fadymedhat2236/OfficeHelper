@@ -23,6 +23,6 @@ namespace OfficeHelper
         
         public static readonly String TFSFolderPath = "D:\\Test";
 
-        public static readonly String OldDTDFilesPath = "D:\\Projects\\SABB_TFS\\(Common)\\Documents\\Design\\Services\\Gateway\\DTD\\";
+        //public static readonly String OldDTDFilesPath = "D:\\Projects\\SABB_TFS\\(Common)\\Documents\\Design\\Services\\Gateway\\DTD\\";
     }
 }
