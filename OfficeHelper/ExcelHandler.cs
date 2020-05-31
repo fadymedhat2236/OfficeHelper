@@ -107,7 +107,7 @@ namespace OfficeHelper
                 if (makeSCI=="1")
                 {
                     Word.Document doc= wordHandler.generateDocument(ref dict,ref constants,"SCI");
-                    wordHandler.addSCIErrorMapping(ref errorMappng,ref doc, dict["ServiceFlow"]);
+                    //wordHandler.addSCIErrorMapping(ref errorMappng,ref doc, dict["ServiceFlow"]);
                     doc.Save();
                     doc.Close();
                 }

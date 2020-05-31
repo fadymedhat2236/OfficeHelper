@@ -53,7 +53,7 @@ namespace OfficeHelper
             if(serviceFlow == "Inbound")
                 index = 24;
             else if(serviceFlow == "Outbound")
-                index = 25;
+                index = 27;
             foreach (List<string> errorRow in errorMappng)
             {
                 if (serviceFlow == "Inbound")
@@ -82,6 +82,7 @@ namespace OfficeHelper
                 index++;
             }
             ErrorTable.Rows[index].Delete();
+            Console.WriteLine("SCI Error Table Added");
         }
         public void addSPIErrorMapping(ref List<List<string>> errorMappng, ref Word.Document doc,string serviceFlow)
         {
@@ -116,6 +117,7 @@ namespace OfficeHelper
                 index++;
             }
             ErrorTable.Rows[index].Delete();
+            Console.WriteLine("SPI Error Table Added");
         }
         public void addDTDErrorMapping(ref List<List<string>> errorMappng, ref Word.Document doc)
         {
@@ -138,6 +140,7 @@ namespace OfficeHelper
                 index++;
             }
             ErrorTable.Rows[index].Delete();
+            Console.WriteLine("DTD Error Table Added");
         }
         private void updateDocument(ref Word.Document doc)
         {
