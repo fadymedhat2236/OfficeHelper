@@ -30,10 +30,16 @@ namespace OfficeHelper
         {
             try
             {
-                Excel.Range lastCell = ws.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
-                return lastCell.Row;
+                /*Excel.Range lastCell = ws.Cells.SpecialCells(Excel.XlCellType.xlCellTypeLastCell, Type.Missing);
+                return lastCell.Row;*/
+                return ws.Cells.Find("*", System.Reflection.Missing.Value,
+                               System.Reflection.Missing.Value, System.Reflection.Missing.Value,
+                               Excel.XlSearchOrder.xlByRows, Excel.XlSearchDirection.xlPrevious,
+                               false, System.Reflection.Missing.Value, System.Reflection.Missing.Value).Row;
+
+
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
                 throw exp;
             }
@@ -134,7 +140,7 @@ namespace OfficeHelper
                     wordHandler.addDTDErrorMapping(ref errorMappng, ref doc);
                     doc.Save();
                     //copy small chunk to avoid large clipboard objects warning message on close
-                    doc.Sections[1].Range.Copy();
+                    //doc.Sections[1].Range.Copy();
                     doc.Close();
                 }
             }

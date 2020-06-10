@@ -66,7 +66,7 @@ namespace OfficeHelper
             try
             {
                 Visio.Document requestVisio;
-                string RequestDiagramPath = Directory.GetCurrentDirectory() + "\\Templates\\" + Constants.ServiceFlow + "\\NormalServiceRequestFlow.vsdx";
+                string RequestDiagramPath = Directory.GetCurrentDirectory() + "\\Templates\\" + Constants.ServiceFlow + "\\ServiceRequestFlow.vsdx";
                 requestVisio = visioApp.Documents.Open(RequestDiagramPath);
                 Visio.Page requestPage = requestVisio.Pages[1];
                 foreach (Visio.Shape shp in requestPage.Shapes)
@@ -107,7 +107,7 @@ namespace OfficeHelper
             try
             {
                 Visio.Document ResponseVisio;
-                string ResponseDiagramPath = Directory.GetCurrentDirectory() + "\\Templates\\" + Constants.ServiceFlow + "\\NormalServiceResponseFlow.vsdx";
+                string ResponseDiagramPath = Directory.GetCurrentDirectory() + "\\Templates\\" + Constants.ServiceFlow + "\\ServiceResponseFlow.vsdx";
                 ResponseVisio = visioApp.Documents.Open(ResponseDiagramPath);
                 Visio.Page ResponsePage = ResponseVisio.Pages[1];
                 foreach (Visio.Shape shp in ResponsePage.Shapes)
